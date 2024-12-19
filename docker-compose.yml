@@ -1,0 +1,30 @@
+services:
+  database:
+    image: postgres:16.4
+    container_name: database
+    profiles: [ db ]
+    networks:
+      - sql-network
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=bookstore
+    ports:
+      - "5432:5432" 
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+    tty: true
+    cpu_count: 2
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -h localhost -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+networks:
+  sql-network:
+
+volumes:
+  postgres_data:
