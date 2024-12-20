@@ -21,6 +21,18 @@ CREATE TABLE books (
  updated_at timestamp with time zone 
 );
 
+CREATE TABLE sales (
+ book_id uuid ,
+ created_at timestamp with time zone ,
+ id uuid  NOT NULL,
+ isbn character varying (13) NOT NULL,
+ payment_method character varying (10) NOT NULL,
+ quantity integer  NOT NULL,
+ status character varying (15),
+ total_price numeric  NOT NULL,
+ updated_at timestamp with time zone 
+);
+
 CREATE TABLE schema_migrations (
  id character varying (255) NOT NULL
 );
@@ -31,6 +43,10 @@ ALTER TABLE books ADD CONSTRAINT books_isbn_key UNIQUE (isbn);
 
 ALTER TABLE books ADD CONSTRAINT books_pkey PRIMARY KEY (id);
 
+ALTER TABLE sales ADD CONSTRAINT sales_book_id_fkey FOREIGN KEY (book_id) REFERENCES books(id);
+
+ALTER TABLE sales ADD CONSTRAINT sales_pkey PRIMARY KEY (id);
+
 ALTER TABLE schema_migrations ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (id);
 
 -- INDEXES 
@@ -38,6 +54,8 @@ ALTER TABLE schema_migrations ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY 
 CREATE UNIQUE INDEX books_isbn_key ON public.books USING btree (isbn)
 
 CREATE UNIQUE INDEX books_pkey ON public.books USING btree (id)
+
+CREATE UNIQUE INDEX sales_pkey ON public.sales USING btree (id)
 
 CREATE UNIQUE INDEX schema_migrations_pkey ON public.schema_migrations USING btree (id)
 
